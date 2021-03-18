@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="homeCss.css">
+</head>
+<body>
+<form th:object="${blog}" method="post">
+    <div class="col-md-10 blogShort">
+
+        <input th:field="*{title}">
+        <article><textarea th:field="*{shortContent}" cols="12" rows="4">
+    </textarea></article>
+        <article><textarea th:field="*{content}" cols="12" rows="15">
+    </textarea></article>
+        <input type="submit" value="Edit">
+    </div>
+</form>
+</body>
+</html>
