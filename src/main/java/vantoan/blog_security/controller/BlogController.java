@@ -54,6 +54,4 @@ public class BlogController {
         return new ModelAndView("detail","blog",blog);
     }
 
-
-
 }

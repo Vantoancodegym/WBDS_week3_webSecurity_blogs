@@ -1,6 +1,7 @@
 package vantoan.blog_security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,6 +15,10 @@ import vantoan.blog_security.service.IAppUserService;
 public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private IAppUserService appUserService;
+    @Autowired
+    private LoginSucessHandle loginSucessHandle;
+    @Autowired
+    private AccesDinedHandler accesDinedHandler;
     //    xac thuc bo nho
     //    @Bean
 //    public UserDetailsService userDetailsService(){
@@ -33,13 +38,15 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/blogs").permitAll()
-                .and().authorizeRequests().antMatchers("/blogs/create").hasRole("USER")
-                .and().authorizeRequests().antMatchers("/blogs/edit/{id}").hasRole("USER")
+                .and().authorizeRequests().antMatchers("/blogs/edit/{id}").hasRole("ADMIN")
+                .and().authorizeRequests().antMatchers(HttpMethod.GET,"/blogs/**").hasAnyRole("USER","ADMIN")
+                .and().authorizeRequests().antMatchers(HttpMethod.POST,"/blogs/**").hasRole("ADMIN")
                 .and().authorizeRequests().antMatchers("/blogs/detail/{id}").permitAll()
                 .and()
-                .formLogin()
+                .formLogin().loginPage("/login").failureForwardUrl("/failLogin").successHandler(loginSucessHandle)
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));;
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .and().exceptionHandling().accessDeniedHandler(accesDinedHandler);
         http.csrf().disable();
 
     }
