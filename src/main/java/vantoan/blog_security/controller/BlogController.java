@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import vantoan.blog_security.model.AppUser;
 import vantoan.blog_security.model.Blog;
+import vantoan.blog_security.service.AppUserService;
+import vantoan.blog_security.service.IAppUserService;
 import vantoan.blog_security.service.IBlogService;
 
 import java.util.List;
@@ -14,6 +17,12 @@ import java.util.List;
 public class BlogController {
     @Autowired
     private IBlogService blogService;
+    @Autowired
+    private IAppUserService appUserService;
+    @ModelAttribute("currentUser")
+    public AppUser getCurrentUser(){
+        return appUserService.getUserCurrent();
+    }
     @GetMapping("")
     public ModelAndView showAll(){
         List<Blog> blogs= blogService.findAll();

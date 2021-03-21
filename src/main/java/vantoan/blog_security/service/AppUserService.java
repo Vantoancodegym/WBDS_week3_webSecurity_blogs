@@ -2,6 +2,7 @@ package vantoan.blog_security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +21,23 @@ public class AppUserService implements IAppUserService, UserDetailsService {
     @Override
     public AppUser findByName(String name) {
         return appUserRepo.findAppUserByName(name);
+    }
+
+    @Override
+    public AppUser getUserCurrent() {
+        AppUser appUser;
+        String name;
+        Object ob = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ob instanceof UserDetails){
+            name = ((UserDetails)ob).getUsername();
+        }
+        else {
+            name = ob.toString();
+        }
+        appUser = this.findByName(name);
+
+        return appUser;
     }
 
     @Override

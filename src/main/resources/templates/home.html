@@ -18,7 +18,13 @@
                 <ul class="nav">
                     <li class="active"><a href="/blogs/create"><span class="glyphicon glyphicon-star"></span> Write Blog</a></li>
                     <li class="nav-divider"></li>
-                    <li><a href="/login"><i class="glyphicon glyphicon-off"></i> Sign in</a></li>
+                    <th:block th:if="${currentUser}!=null">
+                        <li ><span><i th:text="'Welcome  '+${currentUser.getName()}"></i> </span></li>
+                    </th:block>
+
+                    <th:block th:if="${currentUser}==null">
+                    <li ><a href="/login"><i class="glyphicon glyphicon-off"></i> Sign in</a></li>
+                    </th:block>
                 </ul>
             </nav>
         </div>
